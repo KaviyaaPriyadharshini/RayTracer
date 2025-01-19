@@ -2,7 +2,6 @@
 #define CAMERA_H
 #include "hittable.h"
 #include "material.h"
-
 class camera {
   public:
     double aspect_ratio = 1.0;  
@@ -15,7 +14,6 @@ class camera {
     vec3 vup = vec3(0, 1, 0);     
     double defocus_angle = 0;  
     double focus_dist = 10;    
-
     void render(const hittable& world) {
         initialize();
         std::cout << "P3\n" << image_width << ' ' << image_height << "\n255\n";
@@ -32,7 +30,6 @@ class camera {
         }
         std::clog << "\rDone.                 \n";
     }
-
   private:
     int image_height;
     double pixel_samples_scale;  
@@ -43,7 +40,6 @@ class camera {
     vec3 u, v, w;              
     vec3 defocus_disk_u;      
     vec3 defocus_disk_v;      
-
     void initialize() {
         image_height = int(image_width / aspect_ratio);
         image_height = (image_height < 1) ? 1 : image_height;
@@ -66,7 +62,6 @@ class camera {
         defocus_disk_u = u * defocus_radius;
         defocus_disk_v = v * defocus_radius;
     }
-
     ray get_ray(int i, int j) const {
         auto offset = sample_square();
         auto pixel_sample = pixel00_loc + ((i + offset.x()) * pixel_delta_u) + ((j + offset.y()) * pixel_delta_v);
@@ -74,20 +69,16 @@ class camera {
         auto ray_direction = pixel_sample - ray_origin;
         return ray(ray_origin, ray_direction);
     }
-
     vec3 sample_square() const {
         return vec3(random_double() - 0.5, random_double() - 0.5, 0);
     }
-
     vec3 sample_disk(double radius) const {
         return radius * random_in_unit_disk();
     }
-
     point3 defocus_disk_sample() const {
         auto p = random_in_unit_disk();
         return center + (p[0] * defocus_disk_u) + (p[1] * defocus_disk_v);
     }
-
     color ray_color(const ray& r, int depth, const hittable& world) const {
         if (depth <= 0)
             return color(0, 0, 0);
@@ -104,5 +95,4 @@ class camera {
         return (1.0 - a) * color(1.0, 1.0, 1.0) + a * color(0.5, 0.7, 1.0);
     }
 };
-
 #endif
