@@ -1,8 +1,6 @@
 #ifndef HITTABLE_H
 #define HITTABLE_H
-
 class material;
-
 class hit_record {
   public:
     point3 p;
@@ -16,11 +14,9 @@ class hit_record {
         normal = front_face ? outward_normal : -outward_normal;
     }
 };
-
 class hittable {
   public:
     virtual ~hittable() = default;
     virtual bool hit(const ray& r, interval ray_t, hit_record& rec) const = 0;
 };
-
 #endif
